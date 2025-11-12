@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>News Flippable Cards</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+    <div class="container">
+        <h1>📰 News Aggregator</h1>
+
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
+
+        <form method="POST" action="{{ url_for('news') }}">
+            <select name="category">
+                {% for cat in categories %}
+                    <option value="{{ cat }}" {% if cat == selected_category %}selected{% endif %}>{{ cat.capitalize() }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Fetch News</button>
+        </form>
+
+        {% if articles %}
+            <div class="grid">
+                {% for article in articles %}
+                    <div class="card">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <img src="{{ article.image or url_for('static', filename='placeholder.png') }}" alt="Image" />
+                                <h3>{{ article.title }}</h3>
+                            </div>
+                            <div class="card-back">
+                                <p>{{ article.summary or "No summary available." }}</p>
+                                <a href="{{ article.link }}" target="_blank" class="read-more">Read Full Article</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
